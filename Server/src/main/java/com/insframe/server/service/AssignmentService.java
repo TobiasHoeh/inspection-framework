@@ -300,9 +300,11 @@ public class AssignmentService {
 	    		} else {
 	    			throw new AssignmentStorageException(AssignmentStorageException.UPDATED_VERSION_AVAILABLE_TEXT_ID, AssignmentStorageException.UPDATED_VERSION_AVAILABLE_ERRORCODE, new String[]{updateAssignment.getAssignmentName()});
 	    		}
-	    		if(oldAssignment.getUser() != null && !oldAssignment.getUser().getUserName().equals(updateAssignment.getUser().getUserName())){
-	    			User user = oldAssignment.getUser();
-	    			mailService.sendEmail(user.getEmailAddress(), messageSource.getMessage("email.subject.new.assignment.assigned", null, Locale.getDefault()), messageSource.getMessage("email.message.new.assignment.assigned", new String[]{oldAssignment.getAssignmentName()}, LocaleContextHolder.getLocale()));
+	    		if(oldAssignment.getUser() != null && updateAssignment.getUser() != null) { 
+	    			if(!oldAssignment.getUser().getUserName().equals(updateAssignment.getUser().getUserName())) {
+	    				User user = oldAssignment.getUser();
+	    				mailService.sendEmail(user.getEmailAddress(), messageSource.getMessage("email.subject.new.assignment.assigned", null, Locale.getDefault()), messageSource.getMessage("email.message.new.assignment.assigned", new String[]{oldAssignment.getAssignmentName()}, LocaleContextHolder.getLocale()));
+	    			}
 	    		}
 	    		if(oldAssignment.getIsTemplate() != true) {
 	    			mailService.sendEmailToAdminsWithAssignmentDetails(messageSource.getMessage("email.subject.assignment.modified", null, Locale.getDefault()), messageSource.getMessage("email.message.assignment.modified", null, Locale.getDefault()), oldAssignment);

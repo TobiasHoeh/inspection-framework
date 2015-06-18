@@ -116,12 +116,14 @@ public class InspectionObjectService {
     
     public void deleteInspectionObjectByID(String id) throws InspectionObjectAccessException{
     	@SuppressWarnings("unused")
-		boolean noReferenceFound;
+		boolean noReferenceFound = true;
     	
     	InspectionObject inspectionObject = this.findById(id, false);
     	try {
     		assignmentService.findByInspectionObjectId(id);
-			noReferenceFound = false;
+    		if(assignmentService.findByInspectionObjectId(id).size() > 0) {
+    			noReferenceFound = false;
+    		}
 		} catch (AssignmentAccessException | UserAccessException e) {
 			noReferenceFound = true;
 		}
